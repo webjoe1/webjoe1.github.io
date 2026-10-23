@@ -89,6 +89,10 @@ h2{font-size:clamp(1.8rem,5vw,2.4rem);font-weight:800;letter-spacing:-.02em;marg
 .list li:last-child{border:0}
 .list span{display:block;color:var(--muted);font-size:.93rem}
 footer{border-top:1px solid var(--line);padding:2rem 0;color:var(--muted);font-size:.9rem}
+.vc{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .9rem;margin-bottom:1rem;padding:.55rem .9rem;border:1px solid var(--line);border-radius:.4rem;background:var(--surface);width:fit-content;max-width:100%}
+.vc[hidden]{display:none}
+.vc b{font:800 1.3rem/1 "Bricolage Grotesque",sans-serif;color:var(--accent)}
+.vc .fl{font-size:1.25rem;letter-spacing:.15rem}
 </style>
 </head>
 <body>
@@ -234,11 +238,68 @@ footer{border-top:1px solid var(--line);padding:2rem 0;color:var(--muted);font-s
 <h2>Education, training, and references</h2>
 <div class="grid">
 <div class="box"><h3>Bachelor of Science in Commerce, Major in Management</h3><p>Notre Dame of Marbel University<br>Alunan Avenue, City of Koronadal, South Cotabato, 9506 Philippines<br>2003 to 2006</p></div>
-<div class="box"><h3>Trainings and certificates</h3><p>Available upon request.</p></div>
 <div class="box"><h3>References</h3><p>Available upon request.</p></div>
 </div>
+<h3 style="font-size:1.5rem;margin:2.5rem 0 1.1rem">Trainings and certificates</h3>
+<details class="role-card"><summary><h3>Udemy</h3><div class="meta">15 courses | 2024 to 2026</div></summary><ul>
+<li>Claude for Cybersecurity | Jun 2026</li>
+<li>Oracle Fusion Technical Oracle Integration Cloud OIC Gen2 | Jun 2026</li>
+<li>Certified Information Systems Security Officer (CISSO) | Jun 2026</li>
+<li>Learn Oracle Cloud Infrastructure Fundamentals | Jun 2026</li>
+<li>SAP HANA Administration | Jun 2026</li>
+<li>SAP Security Administration and Security Core Concepts | Jun 2026</li>
+<li>SAP Security Administration | Jun 2026</li>
+<li>SAP Overview | Jun 2026</li>
+<li>ServiceNow ITSM Processes | Jun 2026</li>
+<li>Artificial Intelligence Risk and Cyber Security Course 2026 | Jun 2026</li>
+<li>Certified Lean Six Sigma White/Lean Six Sigma Yellow Belt | Jun 2026</li>
+<li>Internal Audit For Beginners, Part 1 | Jun 2026</li>
+<li>Cyber Security: Vulnerability Management | Aug 2025</li>
+<li>Street Photography Masterclass | Apr 2024</li>
+<li>Microsoft 365 Fundamentals: MS-900 + Practice Questions | Mar 2024</li>
+</ul></details>
+<details class="role-card"><summary><h3>Atos</h3><div class="meta">12 courses | 2022 to 2023</div></summary><ul>
+<li>ITIL 4 Foundation: Introduction | Jul 2023</li>
+<li>CompTIA IT Fundamentals: Networking &amp; Wireless Technologies | Aug 2023</li>
+<li>CompTIA IT Fundamentals: Internet Storage and Computer Systems | Aug 2023</li>
+<li>CompTIA IT Fundamentals: Data CPUs and Troubleshooting | Aug 2023</li>
+<li>CompTIA IT Fundamentals: Computer Devices and Components | Aug 2023</li>
+<li>CompTIA IT Fundamentals: Basic IT Concepts | Aug 2023</li>
+<li>CompTIA A+ Core 2: Operating System &amp; Network Management | Mar 2023</li>
+<li>Microsoft 365 Fundamentals: Understanding Cloud Concepts | Mar 2023</li>
+<li>Outlook Microsoft 365: Organizing emails in Outlook 365 | Dec 2022</li>
+<li>Email &amp; Calendar Management | Dec 2022</li>
+<li>New Data Protection Training (Including GDPR) | Oct 2022</li>
+<li>ATOS Cybersecurity and Safety Awareness | Oct 2022</li>
+</ul></details>
+<details class="role-card"><summary><h3>Other providers</h3><div class="meta">6 courses | 2009 to 2026</div></summary><ul>
+<li>The Role of AI Auditing | Skillsoft | Jun 2026</li>
+<li>CIS: Windows Server Admin, Knowledge Based Assessment [101 - BASIC] | Cognizant | Sep 2025</li>
+<li>Google Ads Search Certification | Google Digital Academy (Skillshop) | Jun 2023, expired Jun 2024</li>
+<li>Fundamentals of Digital Marketing | Google Digital Garage | Jun 2023</li>
+<li>Data Science Foundations | Great Learning | May 2023</li>
+<li>Computer Technician NC II | IECEP, TESDA Cebu | Jan 2009</li>
+</ul></details>
 </div></section>
 
-<footer><div class="wrap">&copy; 2026 @jcretardo</div></footer>
+<footer><div class="wrap">
+<div class="vc" id="vc" hidden role="status"><span><b id="vcn">0</b> visits</span></div>
+<div>&copy; 2026 @jcretardo</div>
+</div></footer>
+<script>
+(function(){
+var box=document.getElementById('vc'),n=document.getElementById('vcn');
+if(!window.claude||!claude.use)return;
+Promise.all([claude.use('db'),claude.use('user')]).then(async function(a){
+var db=a[0],user=a[1];if(!db||!user)return;
+var col=db.collection('visits');
+try{var id=await user.id(),ref=col.doc(id),s=await ref.get(),c=s.exists?(s.data().n||0):0;await ref.set({n:c+1,t:Date.now()})}catch(e){}
+col.onSnapshot(function(s){
+var t=0;s.docs.forEach(function(d){t+=(d.data()||{}).n||0});
+n.textContent=t;box.hidden=false;
+},function(){});
+}).catch(function(){});
+})();
+</script>
 </body>
 </html>
